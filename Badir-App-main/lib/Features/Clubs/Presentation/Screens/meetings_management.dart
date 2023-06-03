@@ -4,6 +4,7 @@ import 'package:bader_user_app/Core/Constants/app_strings.dart';
 import 'package:bader_user_app/Features/Clubs/Domain/Entities/meeting_entity.dart';
 import 'package:bader_user_app/Features/Clubs/Presentation/Controller/clubs_cubit.dart';
 import 'package:bader_user_app/Features/Clubs/Presentation/Controller/clubs_states.dart';
+import 'package:bader_user_app/Features/Clubs/Presentation/Screens/update_meeting_screen.dart';
 import 'package:bader_user_app/Features/Events/Presentation/Controller/events_cubit.dart';
 import 'package:bader_user_app/Features/Layout/Presentation/Controller/layout_cubit.dart';
 import 'package:flutter/material.dart';
@@ -18,109 +19,93 @@ class MeetingsManagementScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String idForClubILead =
-        LayoutCubit.getInstance(context).userData!.idForClubLead!;
+    String idForClubILead = LayoutCubit.getInstance(context).userData!.idForClubLead!;
     final ClubsCubit clubsCubit = ClubsCubit.getInstance(context);
-    if (clubsCubit.meetingsDataCreatedByMe.isEmpty)
-      clubsCubit.getMeetingsCreatedByMe(clubID: idForClubILead);
+    if( clubsCubit.meetingsDataCreatedByMe.isEmpty ) clubsCubit.getMeetingsCreatedByMe(clubID: idForClubILead);
     return Directionality(
       textDirection: TextDirection.rtl,
       child: SafeArea(
         child: Scaffold(
-          appBar: AppBar(
-            title: const Text("إدارة الإجتماعات"),
-          ),
+          appBar: AppBar(title: const Text("إدارة الإجتماعات"),),
           floatingActionButton: FloatingActionButton(
-            onPressed: () {
+            onPressed: ()
+            {
               Navigator.pushNamed(context, AppStrings.kCreateMeetingScreen);
             },
             backgroundColor: AppColors.kMainColor,
             child: const Icon(Icons.add),
           ),
-          body: BlocConsumer<ClubsCubit, ClubsStates>(
-              buildWhen: (pastState, currentState) =>
-                  currentState is GetMeetingCreatedBySuccessState,
-              listener: (context, state) {
-                if (state is DeleteMeetingLoadingState) {
-                  showLoadingDialog(context: context);
+          body: BlocConsumer<ClubsCubit,ClubsStates>(
+            buildWhen: (pastState,currentState) => currentState is GetMeetingCreatedBySuccessState,
+            listener: (context,state)
+            {
+              if( state is DeleteMeetingLoadingState )
+                {
+                  showLoadingDialog(context:context);
                 }
-                if (state is DeleteMeetingSuccessState) {
-                  Navigator.pop(context); // To get out from Alert Dialog
-                  showToastMessage(
-                      context: context, message: "تم حذف الاجتماع");
+              if( state is DeleteMeetingSuccessState )
+                {
+                  Navigator.pop(context);   // To get out from Alert Dialog
+                  showToastMessage(context: context, message: "تم حذف الاجتماع");
                 }
-              },
-              builder: (context, state) {
-                return Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
-                  child: state is GetMeetingCreatedByLoadingState
-                      ? const Center(child: CircularProgressIndicator())
-                      : clubsCubit.meetingsDataCreatedByMe.isNotEmpty &&
-                              state is GetMeetingCreatedBySuccessState
-                          ? ListView.separated(
-                              physics: const BouncingScrollPhysics(),
-                              itemCount: clubsCubit.meetingsDataCreatedByMe
-                                  .length, // TODO: Events Related to Club I lead
-                              separatorBuilder: (context, index) => SizedBox(
-                                    height: 15.h,
-                                  ),
-                              itemBuilder: (context, index) => _meetingItem(
-                                  cubit: clubsCubit,
-                                  idForClubILead: idForClubILead,
-                                  context: context,
-                                  meetingEntity: clubsCubit
-                                      .meetingsDataCreatedByMe[index]))
-                          : Center(
-                              child: Text(
-                                "لا توجد إجتماعات حتى الان",
-                                style: TextStyle(
-                                    fontSize: 15.sp,
-                                    color: Colors.black.withOpacity(0.4),
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                );
-              }),
+            },
+            builder: (context,state) {
+              return Padding(
+                padding: EdgeInsets.symmetric(vertical: 10.h,horizontal: 10.w),
+                child: state is GetMeetingCreatedByLoadingState ? const Center(child: CircularProgressIndicator()) : clubsCubit.meetingsDataCreatedByMe.isNotEmpty && state is GetMeetingCreatedBySuccessState ? ListView.separated(
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: clubsCubit.meetingsDataCreatedByMe.length,  
+                    separatorBuilder: (context,index) => SizedBox(height: 15.h,),
+                    itemBuilder: (context,index) => _meetingItem(cubit: clubsCubit,idForClubILead: idForClubILead,context: context,meetingEntity: clubsCubit.meetingsDataCreatedByMe[index])
+                  ) : Center(
+                    child: Text("لا توجد إجتماعات حتى الان",style: TextStyle(fontSize: 15.sp,color: Colors.black.withOpacity(0.4),fontWeight: FontWeight.bold),),
+                  ),
+
+              );
+            }
+          ),
         ),
       ),
     );
   }
 
-  Widget _meetingItem(
-      {required String idForClubILead,
-      required MeetingEntity meetingEntity,
-      required BuildContext context,
-      required ClubsCubit cubit}) {
+  Widget _meetingItem({required String idForClubILead,required MeetingEntity meetingEntity,required BuildContext context,required ClubsCubit cubit}){
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => MeetingDetailsScreen(
-                      meetingEntity: meetingEntity,
-                    )));
+      onTap: ()
+      {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => MeetingDetailsScreen(meetingEntity: meetingEntity,)));
       },
       child: Card(
         elevation: 0.1,
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 18.h, horizontal: 12.w),
-          child: Row(
-            children: [
-              Expanded(
-                  child: Text(
-                meetingEntity.name!,
-                style: TextStyle(
-                    fontSize: 15.sp,
-                    fontWeight: FontWeight.bold,
-                    overflow: TextOverflow.ellipsis),
-              )),
-              _buttonItem(
-                  title: 'حذف',
-                  onTap: () {
-                    cubit.deleteMeeting(
-                        meetingID: meetingEntity.id!, clubID: idForClubILead);
-                  }),
+          padding: EdgeInsets.symmetric(vertical: 18.h,horizontal: 12.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children:
+            [
+              Text(meetingEntity.name!,overflow:TextOverflow.ellipsis,style: TextStyle(fontSize:15.sp,fontWeight:FontWeight.bold,overflow: TextOverflow.ellipsis),),
+              SizedBox(height: 7.h,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children:
+                [
+                  _buttonItem(
+                      title: 'تحديث',
+                      onTap: ()
+                      {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateMeetingScreen(meetingEntity: meetingEntity)));
+                      }
+                  ),
+                  SizedBox(width: 10.w,),
+                  _buttonItem(
+                      title: 'حذف',
+                      onTap: ()
+                      {
+                        cubit.deleteMeeting(meetingID: meetingEntity.id!,clubID: idForClubILead);
+                      }
+                  ),
+                ],
+              )
             ],
           ),
         ),
@@ -128,7 +113,7 @@ class MeetingsManagementScreen extends StatelessWidget {
     );
   }
 
-  Widget _buttonItem({required String title, required Function() onTap}) {
+  Widget _buttonItem({required String title,required Function() onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -136,12 +121,10 @@ class MeetingsManagementScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(2.5),
           color: AppColors.kMainColor,
         ),
-        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 3.h),
-        child: Text(
-          title,
-          style: TextStyle(color: AppColors.kWhiteColor),
-        ),
+        padding: EdgeInsets.symmetric(horizontal: 10.w,vertical: 3.h),
+        child: Text(title,style: TextStyle(color: AppColors.kWhiteColor),),
       ),
     );
   }
+
 }

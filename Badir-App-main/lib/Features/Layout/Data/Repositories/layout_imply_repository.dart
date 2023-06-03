@@ -20,89 +20,111 @@ class LayoutImplyRepository implements LayoutBaseRepository {
   LayoutImplyRepository({required this.layoutRemoteDataSource});
 
   @override
-  Future<bool> updateMyData({required String name,required String college,required String gender,required int phone}) {
-    return layoutRemoteDataSource.updateMyData(name: name, college: college, gender: gender, phone: phone);
+  Future<bool> updateMyData(
+      {required String name,
+      required String college,
+      required String gender,
+      required int phone}) {
+    return layoutRemoteDataSource.updateMyData(
+        name: name, college: college, gender: gender, phone: phone);
   }
 
-
   @override
-  Future<Either<Failure,List<NotificationEntity>>> getNotifications() async {
-    try
-    {
+  Future<Either<Failure, List<NotificationEntity>>> getNotifications() async {
+    try {
       return Right(await layoutRemoteDataSource.getNotifications());
-    }
-    on FirebaseException catch(exception){
+    } on FirebaseException catch (exception) {
       return Left(ServerFailure(errorMessage: exception.code));
     }
   }
 
   @override
   Future<Either<Failure, UserEntity>> getMyData() async {
-    try
-    {
+    try {
       return Right((await layoutRemoteDataSource.getMyData()));
-    }
-    on FirebaseException catch(e){
+    } on FirebaseException catch (e) {
       return Left(ServerFailure(errorMessage: e.code));
     }
   }
 
   @override
-  Future<Either<Failure,Unit>> uploadReport({required String pdfLink,required String clubName,required String clubID,required String senderID,required String reportType}) async {
-    try
-    {
-      return Right(await layoutRemoteDataSource.uploadReport(senderID: senderID,pdfLink: pdfLink, clubName:clubName,clubID: clubID, reportType: reportType));
-    }
-    on ServerException catch(e)
-    {
+  Future<Either<Failure, Unit>> uploadReport(
+      {required String pdfLink,
+      required String clubName,
+      required String clubID,
+      required String senderID,
+      required String reportType}) async {
+    try {
+      return Right(await layoutRemoteDataSource.uploadReport(
+          senderID: senderID,
+          pdfLink: pdfLink,
+          clubName: clubName,
+          clubID: clubID,
+          reportType: reportType));
+    } on ServerException catch (e) {
       return Left(ServerFailure(errorMessage: e.exceptionMessage));
     }
   }
+
   @override
-  Future<Either<Failure,List<UserEntity>>> getAllUsersOnApp() async {
-    try
-    {
+  Future<Either<Failure, List<UserEntity>>> getAllUsersOnApp() async {
+    try {
       return Right(await layoutRemoteDataSource.getAllUsersOnApp());
-    }
-    on ServerException catch(e)
-    {
+    } on ServerException catch (e) {
       return Left(ServerFailure(errorMessage: e.exceptionMessage));
     }
   }
 
   @override
-  Future<Either<Failure,Unit>> logout({required EventsCubit eventsCubit,required ClubsCubit clubsCubit,required LayoutCubit layoutCubit,}) async {
-    try
-    {
-      return Right(await layoutRemoteDataSource.logout(eventsCubit: eventsCubit, clubsCubit: clubsCubit, layoutCubit: layoutCubit));
-    }
-    on ServerException catch(e){
+  Future<Either<Failure, Unit>> logout({
+    required EventsCubit eventsCubit,
+    required ClubsCubit clubsCubit,
+    required LayoutCubit layoutCubit,
+  }) async {
+    try {
+      return Right(await layoutRemoteDataSource.logout(
+          eventsCubit: eventsCubit,
+          clubsCubit: clubsCubit,
+          layoutCubit: layoutCubit));
+    } on ServerException catch (e) {
       return Left(ServerFailure(errorMessage: e.exceptionMessage));
     }
   }
 
   @override
-  Future<Either<Failure,Unit>> sendNotification({required String notifyTitle,required bool toSpecificUserOrNumOfUsers,String? topicName,String? receiverFirebaseToken,required String receiverID,required String clubID,required String notifyContent,required NotificationType notifyType}) async {
-    try
-    {
-      await layoutRemoteDataSource.sendNotification(receiverFirebaseToken:receiverFirebaseToken,notifyTitle: notifyTitle,toSpecificUserOrNumOfUsers: toSpecificUserOrNumOfUsers,topicName: topicName,receiverID: receiverID, clubID: clubID, notifyContent: notifyContent, notifyType: notifyType);
+  Future<Either<Failure, Unit>> sendNotification(
+      {required String notifyTitle,
+      required bool toSpecificUserOrNumOfUsers,
+      String? topicName,
+      String? receiverFirebaseToken,
+      required String receiverID,
+      required String clubID,
+      required String notifyContent,
+      required NotificationType notifyType}) async {
+    try {
+      await layoutRemoteDataSource.sendNotification(
+          receiverFirebaseToken: receiverFirebaseToken,
+          notifyTitle: notifyTitle,
+          toSpecificUserOrNumOfUsers: toSpecificUserOrNumOfUsers,
+          topicName: topicName,
+          receiverID: receiverID,
+          clubID: clubID,
+          notifyContent: notifyContent,
+          notifyType: notifyType);
       return const Right(unit);
-    }
-    on ServerException catch(e){
+    } on ServerException catch (e) {
       return Left(ServerFailure(errorMessage: e.exceptionMessage));
     }
   }
 
-  // TODO: Will return Image Url
   @override
-  Future<Either<Failure,String>> uploadFileToStorage({required File file}) async {
-    try
-    {
-      return Right(await layoutRemoteDataSource.uploadImageToStorage(imgFile: file));
-    }
-    on ServerException catch(e){
+  Future<Either<Failure, String>> uploadFileToStorage(
+      {required File file}) async {
+    try {
+      return Right(
+          await layoutRemoteDataSource.uploadImageToStorage(imgFile: file));
+    } on ServerException catch (e) {
       return Left(ServerFailure(errorMessage: e.exceptionMessage));
     }
   }
-
 }

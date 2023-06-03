@@ -24,6 +24,25 @@
           "other_platform_oauth_client": []
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:546364339262:android:5ad35f5cd3c96c21834d6f",
+        "android_client_info": {
+          "package_name": "com.example.badir_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApCGHc3EgtKhk8paEpAiP_K0KsM3i45cs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
     }
   ],
   "configuration_version": "1"

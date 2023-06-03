@@ -94,8 +94,8 @@ class DrawerItem extends StatelessWidget {
         layoutCubit.userData!.idForClubLead !=
             null) // TODO: عشان المهام المتاحة مش هتنعرض لليدر فقط هتكون للمستخد العادي والعضو
     {
-      drawerData.removeAt(3);
-      drawerData.removeAt(3);
+      drawerData.removeAt(3); // المهام المتاحه للعضو والمستخدم العادي
+      drawerData.removeAt(3); // الاجتماعات هتظهر بس للعضو
     }
     ClubsCubit clubsCubit = ClubsCubit.getInstance(context);
     EventsCubit eventsCubit = EventsCubit.getInstance(context);

@@ -71,7 +71,7 @@ class NotificationsScreen extends StatelessWidget {
                   } else {
                     return Center(
                       child: Text(
-                        "لا توجد اشعارات حتى الآن",
+                        "لا توجد تنبيهات حتى الآن",
                         style: TextStyle(
                             color: Colors.grey,
                             fontSize: 15.sp,

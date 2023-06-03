@@ -18,55 +18,38 @@ class ViewMembersOnMyClubScreen extends StatelessWidget {
     LayoutCubit layoutCubit = LayoutCubit.getInstance(context);
     String idForClubILead = layoutCubit.userData!.idForClubLead!;
     ClubsCubit clubsCubit = ClubsCubit.getInstance(context);
-    if (clubsCubit.membersDataOnMyClub.isEmpty)
-      clubsCubit.getMembersDataOnMyClub(
-          layoutCubit: layoutCubit, idForClubILead: idForClubILead);
+    if( clubsCubit.membersDataOnMyClub.isEmpty ) clubsCubit.getMembersDataOnMyClub(layoutCubit: layoutCubit, idForClubILead: idForClubILead);
     return Directionality(
       textDirection: TextDirection.rtl,
       child: SafeArea(
         child: Scaffold(
-          appBar: AppBar(
-            title: const Text("بيانات الأعضاء"),
-          ),
-          body: BlocConsumer<ClubsCubit, ClubsStates>(
-            listener: (context, state) {
-              if (state is RemoveMemberFromClubLoadingState)
-                showLoadingDialog(context: context);
-              if (state is RemoveMemberFromClubSuccessState) {
-                Navigator.pop(context);
-                showToastMessage(
-                    context: context,
-                    message: 'تم حذف العضو بنجاح',
-                    backgroundColor: AppColors.kGreenColor);
-              }
+          appBar: AppBar(title: const Text("بيانات الأعضاء"),),
+          body: BlocConsumer<ClubsCubit,ClubsStates>(
+            listener: (context,state)
+            {
+              if( state is RemoveMemberFromClubLoadingState ) showLoadingDialog(context: context);
+              if( state is RemoveMemberFromClubSuccessState )
+                {
+                  Navigator.pop(context);
+                  showToastMessage(context: context, message: 'تم حذف العضو بنجاح',backgroundColor: AppColors.kGreenColor);
+                }
             },
-            builder: (context, state) {
-              if (state is GetMembersOnMyClubDataLoadingState) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else {
+            builder: (context,state)
+            {
+              if( state is GetMembersOnMyClubDataLoadingState )
+                {
+                  return const Center(child: CircularProgressIndicator(),);
+                }
+              else
+              {
                 return Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
-                  child: clubsCubit.membersDataOnMyClub.isNotEmpty
-                      ? ListView.builder(
-                          itemCount: clubsCubit.membersDataOnMyClub.length,
-                          itemBuilder: (context, index) => _displayMemberInfo(
-                              context: context,
-                              clubsCubit: clubsCubit,
-                              layoutCubit: layoutCubit,
-                              idForClubILead: idForClubILead,
-                              userEntity:
-                                  clubsCubit.membersDataOnMyClub[index]),
-                        )
-                      : Center(
-                          child: Text(
-                            "لم يتم اضافة أي عضو للنادي حتى الآن",
-                            style: TextStyle(
-                                color: Colors.black26, fontSize: 15.sp),
-                          ),
-                        ),
+                  padding: EdgeInsets.symmetric(vertical: 10.h,horizontal: 10.w),
+                  child: clubsCubit.membersDataOnMyClub.isNotEmpty ? ListView.builder(
+                    itemCount: clubsCubit.membersDataOnMyClub.length,
+                    itemBuilder: (context,index) => _displayMemberInfo(context:context,clubsCubit: clubsCubit,layoutCubit: layoutCubit,idForClubILead: idForClubILead,userEntity: clubsCubit.membersDataOnMyClub[index]),
+                  ) : Center(
+                    child: Text("لم يتم إضافة أي عضو للنادي حتى الآن",style: TextStyle(color: Colors.black26,fontSize: 15.sp),),
+                  ),
                 );
               }
             },
@@ -76,47 +59,29 @@ class ViewMembersOnMyClubScreen extends StatelessWidget {
     );
   }
 
-  Widget _displayMemberInfo(
-      {required BuildContext context,
-      required UserEntity userEntity,
-      required ClubsCubit clubsCubit,
-      required LayoutCubit layoutCubit,
-      required String idForClubILead}) {
+  Widget _displayMemberInfo({required BuildContext context,required UserEntity userEntity,required ClubsCubit clubsCubit,required LayoutCubit layoutCubit,required String idForClubILead}) {
     return InkWell(
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    DisplayMemberDataScreen(userEntity: userEntity)));
+      onTap: ()
+      {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => DisplayMemberDataScreen(userEntity:userEntity)));
       },
       child: Card(
         elevation: 0.1,
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 12.w),
+          padding: EdgeInsets.symmetric(vertical: 15.h,horizontal: 12.w),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "العضو : ${userEntity.name!}",
-                style: TextStyle(
-                    overflow: TextOverflow.ellipsis,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15.5.sp),
-              ),
+            children:
+            [
+              Text("العضو : ${userEntity.name!}",style: TextStyle(overflow: TextOverflow.ellipsis,fontWeight: FontWeight.bold,fontSize: 15.5.sp),),
               _buttonItem(
                   title: "حذف",
                   color: AppColors.kRedColor,
-                  onTap: () {
-                    clubsCubit.removeMemberFromCLubILead(
-                        idForClubILead: idForClubILead,
-                        memberID: userEntity.id!,
-                        layoutCubit: layoutCubit,
-                        clubName: clubsCubit.dataAboutClubYouLead!.name!,
-                        clubID: idForClubILead,
-                        memberFirebaseMessagingToken:
-                            userEntity.firebaseMessagingToken!);
-                  })
+                  onTap: ()
+                  {
+                    clubsCubit.removeMemberFromCLubILead(idForClubILead: idForClubILead, memberID: userEntity.id!, layoutCubit: layoutCubit,clubName: clubsCubit.dataAboutClubYouLead!.name!,clubID: idForClubILead,memberFirebaseMessagingToken: userEntity.firebaseMessagingToken!);
+                  }
+              )
             ],
           ),
         ),
@@ -124,10 +89,7 @@ class ViewMembersOnMyClubScreen extends StatelessWidget {
     );
   }
 
-  Widget _buttonItem(
-      {required String title,
-      required Function() onTap,
-      required Color color}) {
+  Widget _buttonItem({required String title,required Function() onTap,required Color color}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -135,12 +97,10 @@ class ViewMembersOnMyClubScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(2.5),
           color: color,
         ),
-        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 3.h),
-        child: Text(
-          title,
-          style: TextStyle(color: AppColors.kWhiteColor),
-        ),
+        padding: EdgeInsets.symmetric(horizontal: 10.w,vertical: 3.h),
+        child: Text(title,style: TextStyle(color: AppColors.kWhiteColor),),
       ),
     );
   }
+
 }

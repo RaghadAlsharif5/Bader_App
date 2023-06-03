@@ -55,16 +55,15 @@ class EventsCubit extends Cubit<EventsStates> {
       emit(FailedToGetEventsDataState(message: serverFailure.errorMessage));
     }, (eventsData) async {
       allEvents = eventsData;
-      if (Constants.userID != null && idForClubILead != null)
-        await getPastAndNewAndMyEvents(
-            idForClubILead:
-                idForClubILead); // TODO: Notice that id not required...
-      debugPrint("Num of All events on app is : ${eventsData.length}");
+      await getPastAndNewAndMyEvents(
+          idForClubILead:
+              idForClubILead); // TODO: Notice that id not required...
+      debugPrint("Past Events Number is : ${pastEvents.length}");
+      debugPrint("New Events Number is : ${newEvents.length}");
       emit(GetEventsDataSuccessState());
     });
   }
 
-  // TODO: ده عشان صفحه تفاصيل النادي لو عاوز اعرض الفعاليات الخاصه به فقط
   Future<void> getEventsOnSpecificClub(
       {required String clubID, String? idForClubILead}) async {
     List<EventEntity> eventsOnSpecificClub = [];
@@ -145,7 +144,8 @@ class EventsCubit extends Cubit<EventsStates> {
     ownEvents.clear();
     newEvents.clear();
     pastEvents.clear();
-    namesForEventsICreated.clear(); // ده بستعمهلها في صفحه انشاء مهمه تقريبا
+    namesForEventsICreated.clear();
+    debugPrint("All Events number is : ${allEvents.length}");
     if (idForClubILead != null)
       emit(
           EventsClassifiedLoadingState()); // TODO: لأن هستعملها فقط في صفحه اداره الفعاليات عشان اعمل CircleProgressIndicator()
@@ -250,7 +250,7 @@ class EventsCubit extends Cubit<EventsStates> {
     emit(GetNamesOfEventsToUseInOptionsForCreatingTaskState());
   }
 
-  // TODO: ف حاله ان التاسك تبع فعاليه معينه وهو اختار فعاليه مثلا هروح اجيب الداتا بتاعتها بناء علي اسم الفعاليه اللي اختاره من ال DropdownButton
+  // TODO: ف حاله ان التاسك تبع فعاليه معينه وهو اختار فعاليه مثلا هروح اجيب الداتا بتاعتها بناء على اسم الفعاليه اللي اختاره من ال DropdownButton
   Future<EventEntity> getEventDataThrowItsNameToUseItForCreatingTask(
       {required String eventName}) async {
     return ownEvents
@@ -271,7 +271,7 @@ class EventsCubit extends Cubit<EventsStates> {
       required int numOfPosition,
       required String description,
       required bool taskForPublicOrSpecificEvent}) async {
-    // TODO: taskForPublicOrSpecificEvent => هجيب قيمتها م خلال ان هشك علي القيمه المختاره لو هي موجوده في id بتاع الفعاليات اللي انسأتها ولا لا
+    // TODO: taskForPublicOrSpecificEvent => هجيب قيمتها م خلال ان هشك على القيمه المختاره لو هي موجوده في id بتاع الفعاليات اللي انسأتها ولا لا
     emit(CreateTaskLoadingState());
     EventEntity? eventEntitySelectedForTask;
     if (taskForPublicOrSpecificEvent == false)
@@ -497,7 +497,7 @@ class EventsCubit extends Cubit<EventsStates> {
       required int numOfRegistered,
       required String description,
       required bool taskForPublicOrSpecificEvent}) async {
-    // TODO: taskForPublicOrSpecificEvent => هجيب قيمتها م خلال ان هشك علي القيمه المختاره لو هي موجوده في id بتاع الفعاليات اللي انسأتها ولا لا
+    // TODO: taskForPublicOrSpecificEvent => هجيب قيمتها م خلال ان هشك على القيمه المختاره لو هي موجوده في id بتاع الفعاليات اللي انسأتها ولا لا
     emit(UpdateTaskLoadingState());
     EventEntity? eventEntitySelectedForTask;
     if (taskForPublicOrSpecificEvent == false)

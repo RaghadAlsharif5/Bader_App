@@ -20,6 +20,6 @@ class MeetingEntity extends Equatable{
       );
 
   @override
-  // TODO: implement props
+  
   List<Object?> get props => [name,id,description,date,time,location,link];
 }

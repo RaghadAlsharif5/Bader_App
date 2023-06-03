@@ -32,6 +32,7 @@ class EventItemOnHomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: بالنسبه لتلت متغيرات دول انا عامل if علي id بتاع المستخدم عشان اعرف اذا كان visitor ولا لا
     bool eventExpiredAndIHaveNotJoined = Constants.userID != null
         ? Constants.eventExpiredAndIHaveNotJoined(
             event: eventEntity, eventExpired: eventExpired, userEntity: myData!)
@@ -136,12 +137,11 @@ class EventItemOnHomeScreen extends StatelessWidget {
                     } else if (eventInDateAndIDoNotHavePermissionToJoin) {
                       showToastMessage(
                           context: context,
-                          message: 'خاصة بأعضاء نادي ${eventEntity.clubName}',
+                          message: 'خاصة بأعضاء  ${eventEntity.clubName}',
                           backgroundColor: AppColors.kRedColor);
                     }
                   }
                 },
-                // TODO: UserID == null => He is a Visitor ....
                 color: Constants.userID == null
                     ? AppColors.kWhiteColor
                     : myData!.idForClubLead != null ||
@@ -163,7 +163,7 @@ class EventItemOnHomeScreen extends StatelessWidget {
                   Constants.userID == null
                       ? "إنضم إلينا"
                       : myData!.idForClubLead != null
-                          ? "متابعة"
+                          ? "عرض"
                           : eventInDateAndIHaveJoined
                               ? "تم التسجيل"
                               : eventInDateAndIHaveNotJoinedYetAndHavePermission
@@ -172,7 +172,7 @@ class EventItemOnHomeScreen extends StatelessWidget {
                                       ? "انتهت الفعالية"
                                       : eventInDateAndIDoNotHavePermissionToJoin
                                           ? "خاصة"
-                                          : "شاركنا برأيك",
+                                          : "شاركنا رأيك",
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),

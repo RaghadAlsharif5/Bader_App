@@ -15,7 +15,7 @@ void showLoadingDialog({required BuildContext context}) {
                   SizedBox(
                     width: 10.w,
                   ),
-                  const Text('الرجاء الانتظار')
+                  const Text('الرجاء الإنتظار')
                 ],
               ),
             ),

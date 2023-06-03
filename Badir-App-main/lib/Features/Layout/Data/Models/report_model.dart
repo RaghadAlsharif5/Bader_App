@@ -1,8 +1,6 @@
 import '../../Domain/Entities/report_entity.dart';
 
-class ReportModel extends ReportEntity{
-  // Todo: Extend From Achievement Entity
-
+class ReportModel extends ReportEntity {
   const ReportModel({
     required super.reportID,
     required super.reportType,
@@ -12,28 +10,25 @@ class ReportModel extends ReportEntity{
     required super.pdfLink,
   });
 
-  // Todo: From JSON to Refactor Data That come from Firestore
-  factory ReportModel.fromJson({required Map<String,dynamic> json})
-  {
+  factory ReportModel.fromJson({required Map<String, dynamic> json}) {
     return ReportModel(
-        reportID: json['reportID'],
-        reportType:json['reportType'],
-        clubID:json['clubID'],
-        clubName:json['clubName'],
-        senderID:json['senderID'],
-        pdfLink:json['pdfLink'],
+      reportID: json['reportID'],
+      reportType: json['reportType'],
+      clubID: json['clubID'],
+      clubName: json['clubName'],
+      senderID: json['senderID'],
+      pdfLink: json['pdfLink'],
     );
   }
 
-  // Todo: Send Data to Firebase
-  Map<String,dynamic> toJson(){
+  Map<String, dynamic> toJson() {
     return {
-      'reportID' : reportID,
-      'reportType' : reportType,
-      'clubID' : clubID,
-      'clubName' : clubName,
-      'senderID' : senderID,
-      'pdfLink' : pdfLink,
+      'reportID': reportID,
+      'reportType': reportType,
+      'clubID': clubID,
+      'clubName': clubName,
+      'senderID': senderID,
+      'pdfLink': pdfLink,
     };
   }
 }

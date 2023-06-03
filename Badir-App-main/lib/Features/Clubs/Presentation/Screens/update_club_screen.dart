@@ -26,36 +26,24 @@ class UpdateClubScreen extends StatelessWidget {
     final layoutCubit = LayoutCubit.getInstance(context);
     final UserEntity userEntity = layoutCubit.userData!;
     String clubID = userEntity.idForClubLead!;
-    final cubit = ClubsCubit.getInstance(context)
-      ..getCLubDataThatILead(clubID: clubID);
+    final cubit = ClubsCubit.getInstance(context)..getCLubDataThatILead(clubID: clubID);
     _nameController.text = cubit.dataAboutClubYouLead!.name!;
     _collegeController.text = cubit.dataAboutClubYouLead!.college!;
     _aboutClubController.text = cubit.dataAboutClubYouLead!.description ?? "";
-    _membersNumController.text = cubit.dataAboutClubYouLead!.memberNum != null
-        ? cubit.dataAboutClubYouLead!.memberNum.toString()
-        : "";
-    _emailController.text = cubit.dataAboutClubYouLead!.contactAccounts != null
-        ? cubit.dataAboutClubYouLead!.contactAccounts!.email.toString()
-        : '';
-    _twitterController.text =
-        cubit.dataAboutClubYouLead!.contactAccounts != null
-            ? cubit.dataAboutClubYouLead!.contactAccounts!.twitter.toString()
-            : '';
+    _membersNumController.text = cubit.dataAboutClubYouLead!.memberNum != null ? cubit.dataAboutClubYouLead!.memberNum.toString() : "";
+    _emailController.text = cubit.dataAboutClubYouLead!.contactAccounts != null ? cubit.dataAboutClubYouLead!.contactAccounts!.email.toString() : '';
+    _twitterController.text = cubit.dataAboutClubYouLead!.contactAccounts != null ? cubit.dataAboutClubYouLead!.contactAccounts!.twitter.toString() : '';
     return SafeArea(
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
-          appBar: AppBar(
-            title: const Text("تعديل بيانات النادي"),
-          ),
-          body: BlocConsumer<ClubsCubit, ClubsStates>(
-            listener: (context, state) {
-              if (state is ClubUpdatedSuccessState) {
-                showToastMessage(
-                    context: context,
-                    message: "تم تعديل البيانات بنجاح",
-                    backgroundColor: Colors.green,
-                    seconds: 2);
+          appBar: AppBar(title: const Text("تعديل بيانات النادي"),),
+          body: BlocConsumer<ClubsCubit,ClubsStates>(
+            listener: (context,state)
+            {
+              if( state is ClubUpdatedSuccessState )
+              {
+                showToastMessage(context: context, message: "تم تعديل البيانات بنجاح",backgroundColor: Colors.green,seconds: 2);
                 _nameController.clear();
                 _aboutClubController.clear();
                 _twitterController.clear();
@@ -64,163 +52,98 @@ class UpdateClubScreen extends StatelessWidget {
                 cubit.clubImage = null;
                 Navigator.pushNamed(context, AppStrings.kLayoutScreen);
               }
-              if (state is FailedToUpdateClubState) {
-                showToastMessage(
-                    context: context,
-                    message: state.message,
-                    backgroundColor: Colors.red,
-                    seconds: 2);
+              if( state is FailedToUpdateClubState )
+              {
+                showToastMessage(context: context, message: state.message,backgroundColor: Colors.red,seconds: 2);
               }
             },
-            builder: (context, state) {
+            builder: (context,state){
               return Center(
                 child: Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 10.h, horizontal: 12.w),
+                  padding: EdgeInsets.symmetric(vertical: 10.h,horizontal: 12.w),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children:
+                    [
                       Expanded(
                         child: SingleChildScrollView(
                           physics: const BouncingScrollPhysics(),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              if (cubit.clubImage != null ||
-                                  cubit.dataAboutClubYouLead!.image != null)
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    _textUpperTextField(title: "هيكلة النادي"),
-                                    Container(
-                                      height: 125.h,
-                                      width: 225.w,
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 10.h, horizontal: 15.w),
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(4),
-                                          border: Border.all(
-                                              color: Colors.black
-                                                  .withOpacity(0.4))),
-                                      child: GestureDetector(
-                                          onTap: () => cubit.getClubImage(),
-                                          child: cubit.clubImage != null
-                                              ? Image.file(
-                                                  cubit.clubImage!,
-                                                  fit: BoxFit.cover,
-                                                )
-                                              : Image.network(
-                                                  cubit.dataAboutClubYouLead!
-                                                      .image!,
-                                                  fit: BoxFit.cover,
-                                                )),
-                                    )
-                                  ],
-                                ),
-                              if (cubit.clubImage == null &&
-                                  cubit.dataAboutClubYouLead!.image == null)
-                                OutlinedButton(
-                                  onPressed: () => cubit.getClubImage(),
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 10.h, horizontal: 15.w),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        const Icon(
-                                          Icons.image,
-                                          color: Colors.green,
-                                        ),
-                                        SizedBox(
-                                          width: 10.w,
-                                        ),
-                                        Text(
-                                          "اضغط لاختيار صورة",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 15.5.sp),
-                                        )
-                                      ],
+                              if( cubit.clubImage != null || cubit.dataAboutClubYouLead!.image != null )
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children:
+                                [
+                                  _textUpperTextField(title: "هيكلة النادي"),
+                                  Container(
+                                    height: 125.h,
+                                    width: 225.w,
+                                    padding: EdgeInsets.symmetric(vertical: 10.h,horizontal: 15.w),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(4),
+                                        border: Border.all(color: Colors.black.withOpacity(0.4))
                                     ),
+                                    child: GestureDetector(
+                                        onTap: () => cubit.getClubImage(),
+                                        child: cubit.clubImage != null ? Image.file(cubit.clubImage!,fit: BoxFit.cover,) : Image.network(cubit.dataAboutClubYouLead!.image!,fit: BoxFit.cover,)),
+                                  )
+                                ],
+                              ),
+                              if( cubit.clubImage == null && cubit.dataAboutClubYouLead!.image == null )
+                              OutlinedButton(
+                                onPressed : () => cubit.getClubImage(),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 10.h,horizontal: 15.w),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children:
+                                    [
+                                      const Icon(Icons.image,color: Colors.green,),
+                                      SizedBox(width: 10.w,),
+                                      Text("اضغط لاختيار صورة",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15.5.sp),)
+                                    ],
                                   ),
                                 ),
-                              SizedBox(
-                                height: 10.h,
                               ),
+                              SizedBox(height: 10.h,),
                               _textUpperTextField(title: "اسم النادي"),
                               textFieldComponent(controller: _nameController),
                               _textUpperTextField(title: "الكلية"),
-                              textFieldComponent(
-                                  controller: _collegeController,
-                                  enabled: false),
+                              textFieldComponent(controller: _collegeController,enabled: false),
                               _textUpperTextField(title: "الإيميل"),
-                              textFieldComponent(
-                                  controller: _emailController,
-                                  textInputType: TextInputType.emailAddress),
+                              textFieldComponent(controller: _emailController,textInputType: TextInputType.emailAddress),
                               _textUpperTextField(title: "حساب تويتر"),
-                              textFieldComponent(
-                                  controller: _twitterController),
+                              textFieldComponent(controller: _twitterController),
                               _textUpperTextField(title: "عدد الأعضاء"),
-                              textFieldComponent(
-                                  controller: _membersNumController,
-                                  textInputType: TextInputType.number),
+                              textFieldComponent(controller: _membersNumController,textInputType: TextInputType.number),
                               _textUpperTextField(title: "عن النادي"),
-                              textFieldComponent(
-                                  controller: _aboutClubController,
-                                  maxLines: 6),
-                              SizedBox(
-                                height: 20.h,
-                              ),
+                              textFieldComponent(controller: _aboutClubController,maxLines: 6),
+                              SizedBox(height: 20.h,),
                             ],
                           ),
                         ),
                       ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
+                      SizedBox(height: 10.h,),
                       DefaultButton(
                         width: double.infinity,
-                        onTap: () {
-                          if (cubit.clubImage == null &&
-                              cubit.dataAboutClubYouLead!.image != null) {
-                            showToastMessage(
-                                context: context,
-                                message: "الرجاء اختيار صورة",
-                                backgroundColor: AppColors.kRedColor);
-                          } else if (cubit.clubImage != null &&
-                              _nameController.text.isNotEmpty &&
-                              _aboutClubController.text.isNotEmpty &&
-                              _twitterController.text.isNotEmpty &&
-                              _membersNumController.text.isNotEmpty &&
-                              _emailController.text.isNotEmpty) {
-                            cubit.updateClubData(
-                                userEntity: userEntity,
-                                clubID: clubID,
-                                image: cubit.clubImage!,
-                                name: _nameController.text,
-                                memberNum:
-                                    int.parse(_membersNumController.text),
-                                aboutClub: _aboutClubController.text,
-                                email: _emailController.text,
-                                twitter: _twitterController.text);
-                          } else {
-                            cubit.updateClubWithoutImage(
-                                userEntity: userEntity,
-                                clubID: clubID,
-                                imgUrl: cubit.dataAboutClubYouLead!.image!,
-                                name: _nameController.text,
-                                memberNum:
-                                    int.parse(_membersNumController.text),
-                                aboutClub: _aboutClubController.text,
-                                email: _emailController.text,
-                                twitter: _twitterController.text);
+                        onTap: ()
+                        {
+                          if( cubit.clubImage == null && cubit.dataAboutClubYouLead!.image != null )
+                            {
+                              showToastMessage(context: context, message: "الرجاء اختيار صورة",backgroundColor: AppColors.kRedColor);
+                            }
+                          else if( cubit.clubImage != null && _nameController.text.isNotEmpty &&_aboutClubController.text.isNotEmpty &&_twitterController.text.isNotEmpty &&_membersNumController.text.isNotEmpty &&_emailController.text.isNotEmpty)
+                          {
+                            cubit.updateClubData(userEntity:userEntity,clubID: clubID, image: cubit.clubImage!, name: _nameController.text, memberNum: int.parse(_membersNumController.text), aboutClub: _aboutClubController.text ,email: _emailController.text, twitter: _twitterController.text);
+                          }
+                          else
+                          {
+                            cubit.updateClubWithoutImage(userEntity:userEntity,clubID: clubID, imgUrl: cubit.dataAboutClubYouLead!.image!, name: _nameController.text, memberNum: int.parse(_membersNumController.text), aboutClub: _aboutClubController.text ,email: _emailController.text, twitter: _twitterController.text);
                           }
                         },
-                        title: state is UpdateClubLoadingState
-                            ? "جاري التعديل"
-                            : "حفظ التعديلات",
+                        title: state is UpdateClubLoadingState ? "جاري التعديل" : "حفظ التعديلات",
                       ),
                     ],
                   ),
@@ -234,11 +157,10 @@ class UpdateClubScreen extends StatelessWidget {
   }
 }
 
-Widget _textUpperTextField({required String title}) {
+Widget _textUpperTextField({required String title}){
   return Container(
       margin: EdgeInsets.only(bottom: 10.h),
-      child: Text(
-        title,
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15.sp),
-      ));
+      child: Text(title,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15.sp),)
+  );
 }
+

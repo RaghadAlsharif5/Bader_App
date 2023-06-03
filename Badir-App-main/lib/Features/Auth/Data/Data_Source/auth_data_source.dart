@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import '../../../Layout/Data/Models/user_model.dart';
 
-// TODO: Responsible for connect | Call Firebase
+
 class AuthRemoteDataSource {
 
   Future<UserCredential> register({required String email,required String password}) async {

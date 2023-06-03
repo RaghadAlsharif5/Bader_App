@@ -61,7 +61,7 @@ class HomeScreen extends StatelessWidget {
                                     scrollDirection: Axis.vertical,
                                     physics: const BouncingScrollPhysics(),
                                     children: [
-                                      HeadingText(title: "احصائيات قد تهمك"),
+                                      HeadingText(title: "احصائيات تهمك"),
                                       SizedBox(
                                         height: 7.h,
                                       ),
@@ -383,18 +383,18 @@ class HomeScreen extends StatelessWidget {
                                                           Axis.horizontal,
                                                       shrinkWrap: true,
                                                       itemCount: eventsCubit
-                                                          .allEvents
-                                                          .length, // TODO: لان مش عاوز غير بالكتير هم عنصرين فقط
+                                                          .allEvents.length,
                                                       itemBuilder:
                                                           (context, index) {
                                                         return LayoutBuilder(
                                                           builder: (context,
                                                               constraints) {
-                                                            // TODO: eventDate => لان محتاج اعرف اذا كانت الفعاليه عدت ولا لا
                                                             DateTime eventDate =
                                                                 Jiffy("${eventsCubit.allEvents[index].endDate!.trim()} ${eventsCubit.allEvents[index].time!.trim()}",
                                                                         "MMMM dd, yyyy h:mm a")
                                                                     .dateTime;
+                                                            debugPrint(
+                                                                "Event Date is : $eventDate, with id : ${eventsCubit.allEvents[index].id}");
                                                             return EventItemOnHomeScreen(
                                                                 eventsCubit:
                                                                     eventsCubit,
@@ -427,7 +427,7 @@ class HomeScreen extends StatelessWidget {
                                                     height: 50.h,
                                                     width: double.infinity,
                                                     child: Text(
-                                                      "لم يتم اضافة فعاليات حتى الان",
+                                                      "لم يتم اضافة فعاليات حتى الآن",
                                                       textAlign:
                                                           TextAlign.center,
                                                       style: TextStyle(

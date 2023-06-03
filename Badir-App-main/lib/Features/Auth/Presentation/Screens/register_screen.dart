@@ -26,102 +26,87 @@ class RegisterScreen extends StatelessWidget {
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
-          body: BlocConsumer<AuthCubit, AuthStates>(
-            listener: (context, state) {
-              if (state is RegisterSuccessState) {
+          body: BlocConsumer<AuthCubit,AuthStates>(
+            listener: (context,state)
+            {
+              if( state is RegisterSuccessState )
+              {
                 Navigator.pushNamed(context, AppStrings.kLoginScreen);
-                showToastMessage(
-                    context: context,
-                    message: "تم انشاء الحساب بنجاح",
-                    backgroundColor: Colors.green,
-                    seconds: 2);
+                showToastMessage(context: context, message: "تم انشاء الحساب بنجاح",backgroundColor: Colors.green,seconds: 2);
                 _emailController.clear();
                 _passwordController.clear();
                 _phoneController.clear();
                 _nameController.clear();
               }
-              if (state is RegisterFailedState) {
-                showToastMessage(
-                    context: context,
-                    message: state.message,
-                    backgroundColor: Colors.red,
-                    seconds: 2);
+              if( state is RegisterFailedState )
+              {
+                showToastMessage(context: context, message: state.message,backgroundColor: Colors.red,seconds: 2);
               }
             },
-            builder: (context, state) {
+            builder: (context,state) {
               return Center(
                 child: Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 30.h, horizontal: 12.w),
+                  padding: EdgeInsets.symmetric(vertical: 30.h,horizontal: 12.w),
                   child: ListView(
                     physics: const BouncingScrollPhysics(),
-                    children: [
+                    children:
+                    [
                       const TextUpperTextFormField(text: "الاسم"),
                       textFieldComponent(controller: _nameController),
                       const TextUpperTextFormField(text: "رقم الهاتف"),
                       textFieldComponent(controller: _phoneController),
-                      const TextUpperTextFormField(text: "الكلية"),
+                      const TextUpperTextFormField(text: "الكليه"),
                       dropDownComponent(
                           items: Constants.colleges,
-                          onChanged: (college) {
+                          onChanged: (college)
+                          {
                             cubit.chooseCollege(college: college!);
                           },
-                          value: cubit.selectedCollege),
+                          value: cubit.selectedCollege
+                      ),
                       const TextUpperTextFormField(text: "الجنس"),
                       dropDownComponent(
                           items: Constants.genderStatus,
-                          onChanged: (gender) {
+                          onChanged: (gender)
+                          {
                             cubit.chooseGender(gender: gender!);
                           },
-                          value: cubit.selectedGender),
+                          value: cubit.selectedGender
+                      ),
                       const TextUpperTextFormField(text: "البريد الإلكتروني"),
                       textFieldComponent(controller: _emailController),
                       const TextUpperTextFormField(text: "كلمة المرور"),
-                      textFieldComponent(
-                          controller: _passwordController, isSecure: true),
-                      SizedBox(
-                        height: 20.h,
-                      ),
+                      textFieldComponent(controller: _passwordController, isSecure: true),
+                      SizedBox(height: 20.h,),
                       DefaultButton(
                         width: double.infinity,
-                        onTap: () {
-                          if (_emailController.text.isNotEmpty &&
-                              _passwordController.text.isNotEmpty &&
-                              cubit.selectedGender != null &&
-                              cubit.selectedCollege != null &&
-                              _nameController.text.isNotEmpty &&
-                              _phoneController.text.isNotEmpty) {
+                        onTap: ()
+                        {
+                          if( _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty && cubit.selectedGender != null && cubit.selectedCollege != null && _nameController.text.isNotEmpty && _phoneController.text.isNotEmpty )
+                          {
                             cubit.register(
                                 name: _nameController.text,
                                 email: _emailController.text,
                                 phone: int.parse(_phoneController.text),
                                 password: _passwordController.text,
                                 gender: cubit.selectedGender!,
-                                college: cubit.selectedCollege!);
-                          } else {
-                            showToastMessage(
-                                context: context,
-                                message: "الرجاء إدخال البيانات كامله",
-                                backgroundColor: Colors.red,
-                                seconds: 2);
+                                college: cubit.selectedCollege!
+                            );
+                          }
+                          else
+                          {
+                            showToastMessage(context: context, message: "الرجاء إدخال البيانات كامله",backgroundColor: Colors.red,seconds: 2);
                           }
                         },
-                        title: state is RegisterLoadingState
-                            ? "جاري انشاء الحساب"
-                            : "انشاء حساب",
+                        title: state is RegisterLoadingState ? "جاري انشاء الحساب" : "انشاء حساب",
                       ),
-                      SizedBox(
-                        height: 7.5.h,
-                      ),
+                      SizedBox(height: 7.5.h,),
                       Center(
                         child: GestureDetector(
-                          child: Text(
-                            "الرجوع لتسجيل الدخول",
-                            style: TextStyle(color: AppColors.kMainColor),
-                          ),
-                          onTap: () {
-                            Navigator.pushNamed(
-                                context, AppStrings.kLoginScreen);
+                          child: Text("رجوع لتسجيل الدخول",style: TextStyle(color: AppColors.kMainColor),),
+                          onTap: ()
+                          {
+                            Navigator.pushNamed(context, AppStrings.kLoginScreen);
                           },
                         ),
                       )
@@ -136,3 +121,5 @@ class RegisterScreen extends StatelessWidget {
     );
   }
 }
+
+

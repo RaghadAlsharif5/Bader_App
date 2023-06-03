@@ -1,7 +1,6 @@
 import 'package:bader_user_app/Core/Components/alert_dialog_for_loading_item.dart';
 import 'package:bader_user_app/Core/Constants/constants.dart';
 import 'package:bader_user_app/Core/Theme/app_colors.dart';
-import 'package:bader_user_app/Core/Constants/app_strings.dart';
 import 'package:bader_user_app/Features/Clubs/Presentation/Controller/clubs_cubit.dart';
 import 'package:bader_user_app/Features/Clubs/Presentation/Controller/clubs_states.dart';
 import 'package:bader_user_app/Features/Layout/Presentation/Controller/layout_cubit.dart';
@@ -11,32 +10,40 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jiffy/jiffy.dart';
 import '../../../../Core/Components/button_item.dart';
 import '../../../../Core/Components/snackBar_item.dart';
+import '../../Domain/Entities/meeting_entity.dart';
 
-class CreateMeetingScreen extends StatelessWidget {
+class UpdateMeetingScreen extends StatelessWidget {
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _dateController = TextEditingController();
   final _timeController = TextEditingController();
   final _locationController = TextEditingController();
   final _linkController = TextEditingController();
-  CreateMeetingScreen({Key? key}) : super(key: key);
+  final MeetingEntity meetingEntity;
+  UpdateMeetingScreen({Key? key,required this.meetingEntity}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    _nameController.text = meetingEntity.name!;
+    _descriptionController.text = meetingEntity.description!;
+    _dateController.text = meetingEntity.date!;
+    _timeController.text = meetingEntity.time!;
+    _locationController.text = meetingEntity.location!;
+    _linkController.text = meetingEntity.link!;
     final clubsCubit = ClubsCubit.getInstance(context);
     final clubID = LayoutCubit.getInstance(context).userData!.idForClubLead!;
     return SafeArea(
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
-          appBar: AppBar(title: const Text('إنشاء إجتماع'),),
+          appBar: AppBar(title: const Text('تعديل الإجتماع'),),
           body: Padding(
             padding: EdgeInsets.symmetric(vertical: 10.0.h,horizontal: 12.w),
             child: BlocConsumer<ClubsCubit,ClubsStates>(
               listener: (context,state)
               {
-                if( state is CreateMeetingLoadingState ) showLoadingDialog(context: context);
-                if( state is CreateMeetingSuccessState )
+                if( state is UpdateMeetingLoadingState ) showLoadingDialog(context: context);
+                if( state is UpdateMeetingSuccessState )
                 {
                   Navigator.pop(context);  
                   Navigator.pop(context);   
@@ -46,8 +53,9 @@ class CreateMeetingScreen extends StatelessWidget {
                   _timeController.clear();
                   _linkController.clear();
                   _locationController.clear();
+                  showToastMessage(context: context, message: "تم تحديث البيانات بنجاح");
                 }
-                if( state is CreateMeetingWithFailureState )
+                if( state is UpdateMeetingWithFailureState )
                 {
                   Navigator.pop(context);   
                   showToastMessage(context: context, message: state.message,backgroundColor: AppColors.kRedColor);
@@ -81,14 +89,14 @@ class CreateMeetingScreen extends StatelessWidget {
                             {
                               if( _timeController.text.isNotEmpty &&_nameController.text.isNotEmpty &&_descriptionController.text.isNotEmpty &&_dateController.text.isNotEmpty &&_linkController.text.isNotEmpty &&_locationController.text.isNotEmpty)
                               {
-                                clubsCubit.createMeeting(idForClubILead: clubID,name: _nameController.text, description: _descriptionController.text, date: _dateController.text,time: _timeController.text, location: _locationController.text, link: _linkController.text);
+                                clubsCubit.updateMeeting(meetingEntity:meetingEntity,idForClubILead: clubID,name: _nameController.text, description: _descriptionController.text, date: _dateController.text,time: _timeController.text, location: _locationController.text, link: _linkController.text);
                               }
                               else
                               {
                                 showToastMessage(context: context, message: "من فضلك قم بإدخال البيانات كاملة",backgroundColor: AppColors.kRedColor);
                               }
                             },
-                            title: "إنشاء",
+                            title: "حفظ",
                           )
                         ],
                       ),

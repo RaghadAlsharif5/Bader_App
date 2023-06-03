@@ -11,7 +11,6 @@ class AchievementModel extends Achievement{
     required super.clubName
   });
 
-  // Todo: From JSON to Refactor Data That come from Firestore
   factory AchievementModel.fromJson({required Map<String,dynamic> json})
   {
     return AchievementModel(
@@ -23,7 +22,6 @@ class AchievementModel extends Achievement{
     );
   }
 
-  // Todo: Send Data to Firebase
   Map<String,dynamic> toJson(){
     return {
       'totalHours' : totalHours,

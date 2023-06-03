@@ -31,7 +31,7 @@ class ViewAvailableTasksScreen extends StatelessWidget {
             {
               if( state is RequestAuthenticateOnATaskSuccessState )
                 {
-                  showToastMessage(context: context, message: "تم إرسال الطلب لليدر");
+                  showToastMessage(context: context, message: "تم إرسال الطلب للقائد");
                 }
               if( state is FailedToRequestAuthenticateOnATaskState ) showToastMessage(context: context, message: state.message,backgroundColor: AppColors.kRedColor);
             },
@@ -96,7 +96,7 @@ class ViewAvailableTasksScreen extends StatelessWidget {
                       {
                         if( cubit.idForTasksThatIAskedToAuthenticateBefore != null && cubit.idForTasksThatIAskedToAuthenticateBefore!.contains(taskEntity.id.toString().trim()) )
                         {
-                          showToastMessage(context: context, message: 'تم إرسال طلب بالفعل، ف انتظار مصادقة الليدر');
+                          showToastMessage(context: context, message: 'تم إرسال طلب بالفعل، ف انتظار مصادقة القائد');
                         }
                         else if ( myData.idForTasksAuthenticate != null && myData.idForTasksAuthenticate!.contains(taskEntity.id.toString().trim()) )
                         {

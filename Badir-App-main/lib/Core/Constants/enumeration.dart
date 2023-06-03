@@ -1,6 +1,6 @@
-enum NotificationType {
-  askForAMembershipOnSpecificClub,
-  adminMakesYouALeaderOnSpecificClub,
+enum NotificationType{
+  askForAMembershipOnSpecificClub,    // طلب عضوية
+  adminMakesYouALeaderOnSpecificClub,          // الأدمن عينك ليدر علي نادي معين
   acceptYourMembershipRequest,
   acceptYourRequestToAuthenticateOnATask,
   rejectYourRequestToAuthenticateOnATask,
@@ -9,4 +9,6 @@ enum NotificationType {
   deleteClubForEver,
 }
 
-enum EventForPublicOrNot { private, public }
+enum EventForPublicOrNot{
+  private,public
+}

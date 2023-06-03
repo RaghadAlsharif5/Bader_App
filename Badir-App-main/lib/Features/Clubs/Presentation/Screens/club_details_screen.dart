@@ -21,7 +21,7 @@ class ViewClubDetailsScreen extends StatelessWidget {
         child: Scaffold(
           appBar: AppBar(
               title: Text(
-            club.name!,
+            "بيانات النادي",
             overflow: TextOverflow.ellipsis,
           )),
           body: Padding(
@@ -34,15 +34,15 @@ class ViewClubDetailsScreen extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(
+                      Expanded(
+                          child: Text(
                         club.name!,
                         style: TextStyle(
                             color: AppColors.kMainColor,
                             fontWeight: FontWeight.bold,
                             fontSize: 20.sp,
                             overflow: TextOverflow.ellipsis),
-                      ),
-                      const Spacer(),
+                      )),
                       if (club.image != null)
                         Container(
                           height: 90.h,
@@ -66,20 +66,14 @@ class ViewClubDetailsScreen extends StatelessWidget {
                         imagePath: "assets/images/buffer_icon.png",
                         title: "الفعاليات",
                         onTap: () {
-                          if (Constants.userID != null) {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        ViewEventsOnSpecificClubScreen(
-                                          clubID: club.id.toString(),
-                                          clubName: club.name!,
-                                        )));
-                          } else {
-                            // TODO: لأن الفعاليات مش هتظهر الا اذا كان عمل تسجيل دخول
-                            showDialogToVisitorToAskHimToLogin(
-                                context: context);
-                          }
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      ViewEventsOnSpecificClubScreen(
+                                        clubID: club.id.toString(),
+                                        clubName: club.name!,
+                                      )));
                         }),
                     _otherDetailsComponent(
                         imagePath: "assets/images/badge_icon.png",

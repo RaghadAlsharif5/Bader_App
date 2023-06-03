@@ -45,7 +45,7 @@ class EditProfileScreen extends StatelessWidget {
                 showToastMessage(
                     context: context,
                     message:
-                        "حدث خطأ أثناء تعديلات البيانات الرجاء المحاوله لاحقا",
+                        "حدث خطأ أثناء تعديل البيانات الرجاء المحاولة لاحقًا",
                     backgroundColor: Colors.red,
                     seconds: 2);
               }
@@ -61,7 +61,7 @@ class EditProfileScreen extends StatelessWidget {
                       textFieldComponent(controller: _nameController),
                       _textUpperTextField(title: "رقم الهاتف"),
                       textFieldComponent(controller: _phoneController),
-                      _textUpperTextField(title: "الكية"),
+                      _textUpperTextField(title: "الكلية"),
                       dropDownComponent(
                           items: Constants.colleges,
                           onChanged: (college) {
@@ -93,7 +93,7 @@ class EditProfileScreen extends StatelessWidget {
                           } else {
                             showToastMessage(
                                 context: context,
-                                message: "الرجاء إدخال البيانات كامله",
+                                message: " الرجاء إدخال البيانات كاملة",
                                 backgroundColor: Colors.red,
                                 seconds: 2);
                           }

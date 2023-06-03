@@ -10,6 +10,5 @@ class RequestMembershipEntity extends Equatable {
   const RequestMembershipEntity(this.senderID, this.infoAboutSender,this.committeeName,this.senderName,this.senderFirebaseFCMToken);
 
   @override
-  // TODO: implement props
   List<Object?> get props => [senderID,infoAboutSender,committeeName,senderName,senderFirebaseFCMToken];
 }

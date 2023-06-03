@@ -7,6 +7,7 @@ import 'package:bader_user_app/Features/Clubs/Domain/Use_Cases/delete_meeting_us
 import 'package:bader_user_app/Features/Clubs/Domain/Use_Cases/get_all_clubs_use_case.dart';
 import 'package:bader_user_app/Features/Clubs/Domain/Use_Cases/get_member_data_use_case.dart';
 import 'package:bader_user_app/Features/Clubs/Domain/Use_Cases/get_members_on_my_club_use_case.dart';
+import 'package:bader_user_app/Features/Clubs/Domain/Use_Cases/update_meeting_use_case.dart';
 import 'package:bader_user_app/Features/Clubs/Domain/Use_Cases/upload_image_to_storage_use_case.dart';
 import 'package:bader_user_app/Features/Layout/Domain/Entities/user_entity.dart';
 import 'package:bader_user_app/Features/Layout/Presentation/Controller/layout_cubit.dart';
@@ -34,7 +35,6 @@ class ClubsCubit extends Cubit<ClubsStates> {
   static ClubsCubit getInstance(BuildContext context) =>
       BlocProvider.of(context);
 
-  // TODO: Get Notifications
   List<ClubEntity> clubs = [];
   Future<void> getAllClubs({UserEntity? userEntity}) async {
     emit(GetClubsLoadingState());
@@ -51,7 +51,6 @@ class ClubsCubit extends Cubit<ClubsStates> {
     });
   }
 
-  // TODO: CREATE MEETING
   Future<void> createMeeting(
       {required String idForClubILead,
       required String name,
@@ -74,6 +73,33 @@ class ClubsCubit extends Cubit<ClubsStates> {
     }, (unit) async {
       await getMeetingsCreatedByMe(clubID: idForClubILead);
       emit(CreateMeetingSuccessState());
+    });
+  }
+
+  Future<void> updateMeeting(
+      {required MeetingEntity meetingEntity,
+      required String idForClubILead,
+      required String name,
+      required String description,
+      required String date,
+      required String time,
+      required String location,
+      required String link}) async {
+    emit(UpdateMeetingLoadingState());
+    final result = await sl<UpdateMeetingUseCase>().execute(
+        meetingEntity: meetingEntity,
+        idForClubILead: idForClubILead,
+        name: name,
+        description: description,
+        date: date,
+        time: time,
+        location: location,
+        link: link);
+    result.fold((serverFailure) {
+      emit(UpdateMeetingWithFailureState(message: serverFailure.errorMessage));
+    }, (unit) async {
+      await getMeetingsCreatedByMe(clubID: idForClubILead);
+      emit(UpdateMeetingSuccessState());
     });
   }
 
@@ -101,7 +127,6 @@ class ClubsCubit extends Cubit<ClubsStates> {
     });
   }
 
-  // TODO: Get MEETINGS CREATED BY ME
   List<MeetingEntity> meetingsDataCreatedByMe = [];
   Future<void> getMeetingsCreatedByMe({required String clubID}) async {
     meetingsDataCreatedByMe.clear();
@@ -118,7 +143,6 @@ class ClubsCubit extends Cubit<ClubsStates> {
     });
   }
 
-  // TODO: Get MEETINGS CREATED BY ME
   Future<void> deleteMeeting(
       {required String clubID, required String meetingID}) async {
     emit(DeleteMeetingLoadingState());
@@ -132,7 +156,6 @@ class ClubsCubit extends Cubit<ClubsStates> {
     });
   }
 
-  // TODO: CREATE MEETING
   Future<void> updateClubAvailability(
       {required UserEntity userEntity,
       required String clubID,
@@ -153,15 +176,13 @@ class ClubsCubit extends Cubit<ClubsStates> {
     });
   }
 
-  // TODO: Get Notifications
-  List<UserEntity> membersDataOnMyClub = []; // TODO: I lead
+  List<UserEntity> membersDataOnMyClub = [];
   Future<void> getMembersDataOnMyClub(
       {required LayoutCubit layoutCubit,
       required String idForClubILead}) async {
     await layoutCubit.getAllUsersOnApp();
-    membersDataOnMyClub.clear(); // TODO: To Get New Data Every time i call it
-    List<UserEntity> usersOnApp = layoutCubit
-        .allUsersDataOnApp; // TODO: As it take value from getAllUsersOnApp() method
+    membersDataOnMyClub.clear();
+    List<UserEntity> usersOnApp = layoutCubit.allUsersDataOnApp;
     emit(GetMembersOnMyClubDataLoadingState());
     final result = await sl<GetMembersDataOnMyClubUseCase>()
         .execute(idForClubILead: idForClubILead);
@@ -171,7 +192,6 @@ class ClubsCubit extends Cubit<ClubsStates> {
     }, (membersID) {
       debugPrint("All Users on App num is : ${usersOnApp.length}");
       for (var userEntity in usersOnApp) {
-        // TODO: Mean that this User already Member on Club I lead .....
         if (membersID.contains(userEntity.id)) {
           membersDataOnMyClub.add(userEntity);
         }
@@ -182,14 +202,12 @@ class ClubsCubit extends Cubit<ClubsStates> {
     });
   }
 
-  // TODO: USED during request a membership
   String? selectedCommittee;
   void chooseCommittee({required String chosen}) {
     selectedCommittee = chosen;
     emit(CommitteeChosenSuccessState());
   }
 
-  // TODO: Ask for membership
   void askForMembership(
       {required UserEntity userEntity,
       String? senderFirebaseFCMToken,
@@ -215,9 +233,7 @@ class ClubsCubit extends Cubit<ClubsStates> {
 
   bool searchEnabled = false;
   void changeSearchAboutClubStatus({bool? value}) {
-    searchEnabled = value == null
-        ? !searchEnabled
-        : value; // TODO: لان ف بعض الحالات هعوز اخليها false ف هبعت value ساعتها
+    searchEnabled = value == null ? !searchEnabled : value;
     emit(ChangeSearchAboutClubStatus());
   }
 
@@ -291,7 +307,6 @@ class ClubsCubit extends Cubit<ClubsStates> {
     ContactMeansForClubModel contactMeansModel =
         ContactMeansForClubModel(email: email, twitter: twitter);
     String? imageURL = await uploadClubImageToStorage();
-    // Update data on firestore
     final clubUpdateResult = await sl<UpdateClubUseCase>().execute(
         clubID: clubID,
         image: imageURL ?? '',
@@ -403,7 +418,7 @@ class ClubsCubit extends Cubit<ClubsStates> {
           notifyTitle: "العضوية",
           receiverFirebaseToken: memberFirebaseMessagingToken,
           receiverID: memberID,
-          notifyContent: "لقد تم إزالو عضويتك من نادي $clubName",
+          notifyContent: "لقد تم إزالة عضويتك من  $clubName",
           notifyType: NotificationType.membershipRemoveFromSpecificClub,
           clubID: clubID);
       getMembersDataOnMyClub(

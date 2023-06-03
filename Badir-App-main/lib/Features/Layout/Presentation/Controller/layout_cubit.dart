@@ -45,7 +45,7 @@ class LayoutCubit extends Cubit<LayoutStates> {
     bool launchSuccess = await launch(link);
     if (launchSuccess == false)
       emit(ErrorDuringOpenPdfState(
-          message: "حدث خطأ ما عند محاوله فتح الرابط، الرجاء المحاوله لاحقا"));
+          message: "حدث خطأ ما عند محاوله فتح الرابط, الرجاء المحاولة لاحقًا"));
   }
 
   File? pdfFile;
@@ -57,7 +57,6 @@ class LayoutCubit extends Cubit<LayoutStates> {
     if (result != null &&
         result.files.isNotEmpty &&
         result.files.first.extension == 'pdf') {
-      // TODO: Convert PlatformFile to File to be able to upload it
       pdfFile = File(result.files.first.path!);
       emit(PdfSelectedSuccessState());
     } else {
@@ -89,7 +88,7 @@ class LayoutCubit extends Cubit<LayoutStates> {
       });
     } else {
       emit(UploadReportToAdminWithFailureState(
-          message: 'حدث خطأ اثناء رفع الملف الرجاء المحاوله لاحقا'));
+          message: 'حدث خطأ اثناء رفع الملف الرجاء المحاولة لاحقًا'));
     }
   }
 
@@ -105,14 +104,14 @@ class LayoutCubit extends Cubit<LayoutStates> {
     emit(GenderChosenSuccessState());
   }
 
-  // TODO: USE it on Upload Report To Admin Screen
+  //  USE it on Upload Report To Admin Screen
   String? reportType;
   void chooseReportType({required String chosen}) {
     reportType = chosen;
     emit(GenderChosenSuccessState());
   }
 
-  // TODO: Get Notifications
+  //  Get Notifications
   List<NotificationEntity> notifications = [];
   void getNotifications() async {
     emit(GetNotificationsLoadingState());
@@ -126,7 +125,7 @@ class LayoutCubit extends Cubit<LayoutStates> {
     });
   }
 
-  // TODO: Get All Users On App | Use it to get Members on Club that I lead .....
+  //  Get All Users On App | Use it to get Members on Club that I lead .....
   List<UserEntity> allUsersDataOnApp = [];
   Future<void> getAllUsersOnApp() async {
     final result = await sl<GetAllUsersOnAppUseCase>().execute();
@@ -155,10 +154,9 @@ class LayoutCubit extends Cubit<LayoutStates> {
     });
   }
 
-  // TODO: USER
+  //  USER
   UserEntity? userData;
   Future<void> getMyData({ClubsCubit? clubsCubit}) async {
-    // TODO: ClubsCubit? clubsCubit not required عشان هباصي قيمه فقط لو جالي notification فيه ان اصبحت قائد علي نادي to getDataAboutClubILead from this cubit
     var result = await sl<GetMyDataUseCase>().execute();
     result.fold(
         (serverFailure) =>

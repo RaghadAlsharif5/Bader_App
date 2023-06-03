@@ -8,6 +8,5 @@ class MemberEntity extends Equatable{
   const MemberEntity({required this.memberName,required this.memberID, required this.membershipDate});
 
   @override
-  // TODO: implement props
   List<Object?> get props => [memberName,membershipDate,memberID];
 }

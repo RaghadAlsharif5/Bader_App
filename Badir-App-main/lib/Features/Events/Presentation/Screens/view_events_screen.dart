@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jiffy/jiffy.dart';
+import '../../../../Core/Constants/enumeration.dart';
 import 'event_details_screen.dart';
 
 class ViewAllEventsThrowAppScreen extends StatelessWidget {
@@ -18,12 +19,9 @@ class ViewAllEventsThrowAppScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final EventsCubit eventCubit = EventsCubit.getInstance(context);
     final LayoutCubit layoutCubit = LayoutCubit.getInstance(context);
-    UserEntity? userEntity =
-        Constants.userID != null ? layoutCubit.userData! : null;
-    final EventsCubit eventCubit = EventsCubit.getInstance(context)
-      ..getPastAndNewAndMyEvents(
-          idForClubILead: userEntity != null ? userEntity.idForClubLead : null);
+    final UserEntity userEntity = layoutCubit.userData!;
     return DefaultTabController(
       length: 2,
       child: SafeArea(
@@ -79,7 +77,7 @@ class ViewAllEventsThrowAppScreen extends StatelessWidget {
   Widget _displayEvents(
       {required EventsCubit eventsCubit,
       required LayoutCubit layoutCubit,
-      UserEntity? userEntity,
+      required UserEntity userEntity,
       required List<EventEntity> events,
       required bool newEventsOrNot,
       required BuildContext context}) {
@@ -93,38 +91,30 @@ class ViewAllEventsThrowAppScreen extends StatelessWidget {
                   "${events[index].endDate!.trim()} ${events[index].time!.trim()}",
                   "MMMM dd, yyyy h:mm a")
               .dateTime);
-          bool eventExpiredAndIHaveNotJoined = Constants.userID != null
-              ? Constants.eventExpiredAndIHaveNotJoined(
+          bool eventExpiredAndIHaveNotJoined =
+              Constants.eventExpiredAndIHaveNotJoined(
                   event: events[index],
                   eventExpired: eventFinished,
-                  userEntity: userEntity!)
-              : false;
-          bool eventExpiredAndIHaveJoined = Constants.userID != null
-              ? Constants.eventExpiredAndIHaveJoined(
+                  userEntity: userEntity);
+          bool eventExpiredAndIHaveJoined =
+              Constants.eventExpiredAndIHaveJoined(
                   event: events[index],
                   eventExpired: eventFinished,
-                  userEntity: userEntity!)
-              : false;
-          bool eventInDateAndIHaveJoined = Constants.userID != null
-              ? Constants.eventInDateAndIHaveJoined(
-                  event: events[index],
-                  eventExpired: eventFinished,
-                  userEntity: userEntity!)
-              : false;
+                  userEntity: userEntity);
+          bool eventInDateAndIHaveJoined = Constants.eventInDateAndIHaveJoined(
+              event: events[index],
+              eventExpired: eventFinished,
+              userEntity: userEntity);
           bool eventInDateAndIHaveNotJoinedYetAndHavePermission =
-              Constants.userID != null
-                  ? Constants.eventInDateAndIHaveNotJoinedYetAndHavePermission(
-                      userEntity: userEntity!,
-                      eventExpired: eventFinished,
-                      event: events[index])
-                  : false;
+              Constants.eventInDateAndIHaveNotJoinedYetAndHavePermission(
+                  userEntity: userEntity,
+                  eventExpired: eventFinished,
+                  event: events[index]);
           bool eventInDateAndIDoNotHavePermissionToJoin =
-              Constants.userID != null
-                  ? Constants.eventInDateAndIDoNotHavePermissionToJoin(
-                      userEntity: userEntity!,
-                      eventExpired: eventFinished,
-                      event: events[index])
-                  : false;
+              Constants.eventInDateAndIDoNotHavePermissionToJoin(
+                  userEntity: userEntity,
+                  eventExpired: eventFinished,
+                  event: events[index]);
           return GestureDetector(
             onTap: () {
               Navigator.push(
@@ -171,22 +161,18 @@ class ViewAllEventsThrowAppScreen extends StatelessWidget {
                       alignment: AlignmentDirectional.topEnd,
                       child: MaterialButton(
                         elevation: 0,
-                        color: Constants.userID == null
+                        color: userEntity.idForClubLead != null ||
+                                eventInDateAndIHaveNotJoinedYetAndHavePermission
                             ? AppColors.kMainColor
-                            : userEntity!.idForClubLead != null ||
-                                    eventInDateAndIHaveNotJoinedYetAndHavePermission
-                                ? AppColors.kMainColor
-                                : eventExpiredAndIHaveJoined
-                                    ? AppColors.kOrangeColor
-                                    : eventInDateAndIDoNotHavePermissionToJoin ||
-                                            eventExpiredAndIHaveNotJoined
-                                        ? AppColors.kRedColor
-                                        : AppColors.kGreenColor,
+                            : eventExpiredAndIHaveJoined
+                                ? AppColors.kOrangeColor
+                                : eventInDateAndIDoNotHavePermissionToJoin ||
+                                        eventExpiredAndIHaveNotJoined
+                                    ? AppColors.kRedColor
+                                    : AppColors.kGreenColor,
                         textColor: AppColors.kWhiteColor,
                         onPressed: () {
-                          if (Constants.userID == null ||
-                              (userEntity != null &&
-                                  userEntity.idForClubLead != null)) {
+                          if (userEntity.idForClubLead != null) {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -214,24 +200,22 @@ class ViewAllEventsThrowAppScreen extends StatelessWidget {
                             showToastMessage(
                                 context: context,
                                 message:
-                                    'خاصة بأعضاء نادي ${events[index].clubName}',
+                                    'خاصة بأعضاء  ${events[index].clubName}',
                                 backgroundColor: AppColors.kRedColor);
                           }
                         },
                         child: Text(
-                          Constants.userID == null
-                              ? "عرض"
-                              : userEntity!.idForClubLead != null
-                                  ? "عرض"
-                                  : eventInDateAndIHaveJoined
-                                      ? "تم التسجيل"
-                                      : eventInDateAndIHaveNotJoinedYetAndHavePermission
-                                          ? "سجل الآن"
-                                          : eventExpiredAndIHaveNotJoined
-                                              ? "انتهت الفعالية"
-                                              : eventInDateAndIDoNotHavePermissionToJoin
-                                                  ? "خاصة"
-                                                  : "شاركنا برأيك",
+                          userEntity.idForClubLead != null
+                              ? "متابعة"
+                              : eventInDateAndIHaveJoined
+                                  ? "تم التسجيل"
+                                  : eventInDateAndIHaveNotJoinedYetAndHavePermission
+                                      ? "سجل الآن"
+                                      : eventExpiredAndIHaveNotJoined
+                                          ? "انتهت الفعالية"
+                                          : eventInDateAndIDoNotHavePermissionToJoin
+                                              ? "خاصة"
+                                              : "شاركنا برأيك",
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ),

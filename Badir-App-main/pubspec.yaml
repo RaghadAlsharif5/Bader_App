@@ -44,6 +44,7 @@ dependencies:
   flutter_phoenix: ^1.1.1
   flutter_launcher_icons: ^0.13.1
   awesome_dialog: ^3.1.0
+  rive: ^0.11.1
   http: ^0.13.6
   firebase_messaging: ^14.6.1
   firebase_messaging_platform_interface: ^4.5.1

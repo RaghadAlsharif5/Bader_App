@@ -23,138 +23,96 @@ class TasksManagementScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String idForClubILead =
-        LayoutCubit.getInstance(context).userData!.idForClubLead!;
+    String idForClubILead = LayoutCubit.getInstance(context).userData!.idForClubLead!;
     final eventCubit = EventsCubit.getInstance(context);
-    if (eventCubit.tasksCreatedByMe.isEmpty)
-      eventCubit.getTasksCreatedByMe(idForClubILead: idForClubILead);
+    if( eventCubit.tasksCreatedByMe.isEmpty ) eventCubit.getTasksCreatedByMe(idForClubILead: idForClubILead);
     return Directionality(
       textDirection: TextDirection.rtl,
       child: SafeArea(
         child: Scaffold(
-          appBar: AppBar(
-            title: const Text("إدارة المهام"),
-          ),
+          appBar: AppBar(title: const Text("إدارة المهام"),),
           floatingActionButton: FloatingActionButton(
-            onPressed: () {
+            onPressed: ()
+            {
               Navigator.pushNamed(context, AppStrings.kCreateTaskScreen);
             },
             backgroundColor: AppColors.kMainColor,
             child: const Icon(Icons.add),
           ),
-          body: BlocConsumer<EventsCubit, EventsStates>(
-              buildWhen: (pastState, currentState) =>
-                  currentState is GetTasksThatCreatedByMeSuccessState,
-              listener: (context, state) {
-                if (state is DeleteTaskLoadingState) {
-                  showLoadingDialog(context: context);
+          body: BlocConsumer<EventsCubit,EventsStates>(
+            buildWhen: (pastState,currentState) => currentState is GetTasksThatCreatedByMeSuccessState,
+            listener: (context,state)
+            {
+              if( state is DeleteTaskLoadingState )
+                {
+                  showLoadingDialog(context:context);
                 }
-                if (state is DeleteTaskSuccessState) {
+              if( state is DeleteTaskSuccessState )
+                {
                   Navigator.pop(context);
                   showToastMessage(context: context, message: 'تم حذف المهمة');
                 }
-              },
-              builder: (context, state) {
-                return Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
-                  child: state is GetTasksThatCreatedByMeLoadingState
-                      ? const Center(child: CircularProgressIndicator())
-                      : eventCubit.tasksCreatedByMe.isNotEmpty
-                          ? ListView.separated(
-                              physics: const BouncingScrollPhysics(),
-                              itemCount: eventCubit.tasksCreatedByMe
-                                  .length, // TODO: Events Related to Club I lead
-                              separatorBuilder: (context, index) => SizedBox(
-                                    height: 15.h,
-                                  ),
-                              itemBuilder: (context, index) => _taskItem(
-                                  idForClubILead: idForClubILead,
-                                  cubit: eventCubit,
-                                  context: context,
-                                  taskEntity:
-                                      eventCubit.tasksCreatedByMe[index]))
-                          : Center(
-                              child: Text(
-                                "لم يتم إضافة أي مهمة حتى الآن",
-                                style: TextStyle(
-                                    fontSize: 15.sp,
-                                    color: Colors.black.withOpacity(0.4),
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                );
-              }),
+            },
+            builder: (context,state) {
+              return Padding(
+                padding: EdgeInsets.symmetric(vertical: 10.h,horizontal: 10.w),
+                child: state is GetTasksThatCreatedByMeLoadingState ? const Center(child: CircularProgressIndicator()) : eventCubit.tasksCreatedByMe.isNotEmpty ? ListView.separated(
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: eventCubit.tasksCreatedByMe.length,   // TODO: Events Related to Club I lead
+                    separatorBuilder: (context,index) => SizedBox(height: 15.h,),
+                    itemBuilder: (context,index) => _taskItem(idForClubILead: idForClubILead,cubit:eventCubit,context: context,taskEntity: eventCubit.tasksCreatedByMe[index])
+                ) : Center(
+                  child: Text("لا يتم إضافة أي مهمة حتى الآن",style: TextStyle(fontSize: 15.sp,color: Colors.black.withOpacity(0.4),fontWeight: FontWeight.bold),),
+                ),
+              );
+            }
+          ),
         ),
       ),
     );
   }
 
-  Widget _taskItem(
-      {required String idForClubILead,
-      required TaskEntity taskEntity,
-      required BuildContext context,
-      required EventsCubit cubit}) {
+  Widget _taskItem({required String idForClubILead,required TaskEntity taskEntity,required BuildContext context,required EventsCubit cubit}){
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    ViewTaskDetailsScreen(taskEntity: taskEntity)));
+      onTap: ()
+      {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => ViewTaskDetailsScreen(taskEntity: taskEntity)));
       },
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
+        padding: EdgeInsets.symmetric(vertical: 10.h,horizontal: 10.w),
         color: AppColors.kYellowColor,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              taskEntity.name,
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  overflow: TextOverflow.ellipsis,
-                  fontSize: 15.sp),
-            ),
-            SizedBox(
-              height: 5.h,
-            ),
+            Text(taskEntity.name,style: TextStyle(fontWeight:FontWeight.bold,overflow: TextOverflow.ellipsis,fontSize: 15.sp),),
+            SizedBox(height: 5.h,),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
-              children: [
+              children:
+              [
                 _buttonItem(
                   title: 'تحديث',
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                UpdateTaskScreen(taskEntity: taskEntity)));
+                  onTap: ()
+                  {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateTaskScreen(taskEntity: taskEntity)));
                   },
                 ),
-                SizedBox(
-                  width: 5.w,
-                ),
+                SizedBox(width: 5.w,),
                 _buttonItem(
                     title: 'الطلبات',
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  ViewRequestsForAuthenticateOnTaskScreen(
-                                      task: taskEntity)));
-                    }),
-                SizedBox(
-                  width: 5.w,
-                ),
+                    onTap: ()
+                    {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => ViewRequestsForAuthenticateOnTaskScreen(task: taskEntity)));
+                    }
+                    ),
+                SizedBox(width: 5.w,),
                 _buttonItem(
                     title: 'حذف',
-                    onTap: () {
-                      cubit.deleteTask(
-                          taskID: taskEntity.id.toString(),
-                          idForClubILead: idForClubILead);
-                    }),
+                    onTap: ()
+                    {
+                      cubit.deleteTask(taskID: taskEntity.id.toString(), idForClubILead: idForClubILead);
+                    }
+                ),
               ],
             ),
           ],
@@ -163,7 +121,7 @@ class TasksManagementScreen extends StatelessWidget {
     );
   }
 
-  Widget _buttonItem({required String title, required Function() onTap}) {
+  Widget _buttonItem({required String title,required Function() onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -171,12 +129,10 @@ class TasksManagementScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(2.5),
           color: AppColors.kMainColor,
         ),
-        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 3.h),
-        child: Text(
-          title,
-          style: TextStyle(color: AppColors.kWhiteColor),
-        ),
+        padding: EdgeInsets.symmetric(horizontal: 10.w,vertical: 3.h),
+        child: Text(title,style: TextStyle(color: AppColors.kWhiteColor),),
       ),
     );
   }
+
 }
