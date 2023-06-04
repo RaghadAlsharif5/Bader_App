@@ -137,7 +137,7 @@ class EventItemOnHomeScreen extends StatelessWidget {
                     } else if (eventInDateAndIDoNotHavePermissionToJoin) {
                       showToastMessage(
                           context: context,
-                          message: 'خاصة بأعضاء نادي ${eventEntity.clubName}',
+                          message: 'خاصة بأعضاء  ${eventEntity.clubName}',
                           backgroundColor: AppColors.kRedColor);
                     }
                   }

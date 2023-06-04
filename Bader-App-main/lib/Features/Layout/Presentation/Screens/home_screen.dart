@@ -246,7 +246,7 @@ class HomeScreen extends StatelessWidget {
                                             return clubsCubit.clubs.isNotEmpty
                                                 ? SizedBox(
                                                     width: double.infinity,
-                                                    height: 120.h,
+                                                    height: 100.h,
                                                     child: ListView.separated(
                                                       separatorBuilder:
                                                           (context, index) =>

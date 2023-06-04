@@ -124,7 +124,6 @@ class EventDetailsScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  // Constants.userID != null لان ما نبغى الزر يظهر لل Visitor
                   if (Constants.userID != null &&
                       userEntity!.idForClubLead == null &&
                       (eventInDateAndIHaveJoined ||
@@ -139,7 +138,6 @@ class EventDetailsScreen extends StatelessWidget {
                           eventInDateAndIHaveNotJoinedYetAndHavePermission ||
                           eventExpiredAndIHaveJoined))
                     DefaultButton(
-                      // TODO: ماراح يظهر الا اذا كنت مسجل فيها او هي كانت عامة بس لو انا ليدر ماراح يظهر ...
                       width: double.infinity,
                       backgroundColor: eventExpiredAndIHaveJoined
                           ? AppColors.kOrangeColor
@@ -205,7 +203,7 @@ class EventDetailsScreen extends StatelessWidget {
                 ? Padding(
                     padding: EdgeInsets.only(right: 10.0.w),
                     child: Text(
-                      "إضغط هنا",
+                      "اضغظ هنا",
                       style: TextStyle(
                           fontSize: 12.sp, color: AppColors.kRedColor),
                     ),

@@ -155,7 +155,7 @@ class ViewAllEventsThrowAppScreen extends StatelessWidget {
                       maxLines: 3,
                       style: const TextStyle(overflow: TextOverflow.ellipsis),
                     ),
-                    Row(
+                    /* Row(
                       children: [
                         Text(
                           events[index].startDate!.trim(),
@@ -163,7 +163,7 @@ class ViewAllEventsThrowAppScreen extends StatelessWidget {
                         ),
                         Text(" , ${events[index].location!.trim()}"),
                       ],
-                    ),
+                    ),*/
                     SizedBox(
                       height: 5.h,
                     ),

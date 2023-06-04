@@ -13,7 +13,7 @@ Widget dropDownComponent(
     decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
     child: DropdownButtonHideUnderline(
       child: DropdownButton(
-        hint: const Text("إختار"),
+        hint: const Text("إختر"),
         value: value,
         onChanged: onChanged,
         items: items

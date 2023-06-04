@@ -435,7 +435,7 @@ class ClubsCubit extends Cubit<ClubsStates> {
           notifyTitle: "العضوية",
           receiverFirebaseToken: memberFirebaseMessagingToken,
           receiverID: memberID,
-          notifyContent: "لقد تم إزالة عضويتك من نادي $clubName",
+          notifyContent: "لقد تم إزالة عضويتك من  $clubName",
           notifyType: NotificationType.membershipRemoveFromSpecificClub,
           clubID: clubID);
       getMembersDataOnMyClub(
