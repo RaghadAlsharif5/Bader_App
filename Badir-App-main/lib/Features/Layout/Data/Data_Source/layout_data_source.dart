@@ -19,6 +19,7 @@ import '../Models/notification_model.dart';
 import 'package:http/http.dart' as http;
 
 class LayoutRemoteDataSource {
+  // TODO: USER
   Future<UserModel> getMyData() async {
     UserModel? userModel;
     DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
@@ -50,6 +51,7 @@ class LayoutRemoteDataSource {
     }
   }
 
+  // TODO: Notifications
   Future<List<NotifyModel>> getNotifications() async {
     List<NotifyModel> notifications = [];
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -63,6 +65,7 @@ class LayoutRemoteDataSource {
     return notifications;
   }
 
+  // TODO: Include send it using Firebase FCM && save Notify Data on User Document
   Future<void> sendNotification(
       {required String notifyTitle,
       required bool toSpecificUserOrNumOfUsers,
@@ -174,7 +177,8 @@ class LayoutRemoteDataSource {
           reportID: newReportID.toString(),
           reportType: reportType,
           clubID: clubID,
-          pdfLink: pdfLink);
+          pdfLink: pdfLink,
+          isAccepted: null);
       await FirebaseFirestore.instance
           .collection(Constants.kReportsCollectionName)
           .doc(newReportID.toString())
@@ -185,6 +189,7 @@ class LayoutRemoteDataSource {
     }
   }
 
+  // Todo: topicName => في حاله لو هبعت لناس عامله subscribe to specific Topic
   Future<void> notifyUserOrNumberOfUsersUsingFCMAPI(
       {required bool toSpecificUserOrNumOfUsers,
       String? topicName,

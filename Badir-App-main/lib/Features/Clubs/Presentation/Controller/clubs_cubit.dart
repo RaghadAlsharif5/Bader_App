@@ -35,6 +35,7 @@ class ClubsCubit extends Cubit<ClubsStates> {
   static ClubsCubit getInstance(BuildContext context) =>
       BlocProvider.of(context);
 
+  // TODO: Get Notifications
   List<ClubEntity> clubs = [];
   Future<void> getAllClubs({UserEntity? userEntity}) async {
     emit(GetClubsLoadingState());
@@ -51,6 +52,7 @@ class ClubsCubit extends Cubit<ClubsStates> {
     });
   }
 
+  // TODO: CREATE MEETING
   Future<void> createMeeting(
       {required String idForClubILead,
       required String name,
@@ -76,6 +78,7 @@ class ClubsCubit extends Cubit<ClubsStates> {
     });
   }
 
+  // TODO: Update MEETING
   Future<void> updateMeeting(
       {required MeetingEntity meetingEntity,
       required String idForClubILead,
@@ -127,6 +130,7 @@ class ClubsCubit extends Cubit<ClubsStates> {
     });
   }
 
+  // TODO: Get MEETINGS CREATED BY ME
   List<MeetingEntity> meetingsDataCreatedByMe = [];
   Future<void> getMeetingsCreatedByMe({required String clubID}) async {
     meetingsDataCreatedByMe.clear();
@@ -143,6 +147,7 @@ class ClubsCubit extends Cubit<ClubsStates> {
     });
   }
 
+  // TODO: Get MEETINGS CREATED BY ME
   Future<void> deleteMeeting(
       {required String clubID, required String meetingID}) async {
     emit(DeleteMeetingLoadingState());
@@ -156,6 +161,7 @@ class ClubsCubit extends Cubit<ClubsStates> {
     });
   }
 
+  // TODO: CREATE MEETING
   Future<void> updateClubAvailability(
       {required UserEntity userEntity,
       required String clubID,
@@ -176,13 +182,15 @@ class ClubsCubit extends Cubit<ClubsStates> {
     });
   }
 
-  List<UserEntity> membersDataOnMyClub = [];
+  // TODO: Get Notifications
+  List<UserEntity> membersDataOnMyClub = []; // TODO: I lead
   Future<void> getMembersDataOnMyClub(
       {required LayoutCubit layoutCubit,
       required String idForClubILead}) async {
     await layoutCubit.getAllUsersOnApp();
-    membersDataOnMyClub.clear();
-    List<UserEntity> usersOnApp = layoutCubit.allUsersDataOnApp;
+    membersDataOnMyClub.clear(); // TODO: To Get New Data Every time i call it
+    List<UserEntity> usersOnApp = layoutCubit
+        .allUsersDataOnApp; // TODO: As it take value from getAllUsersOnApp() method
     emit(GetMembersOnMyClubDataLoadingState());
     final result = await sl<GetMembersDataOnMyClubUseCase>()
         .execute(idForClubILead: idForClubILead);
@@ -191,7 +199,9 @@ class ClubsCubit extends Cubit<ClubsStates> {
           message: serverFailure.errorMessage));
     }, (membersID) {
       debugPrint("All Users on App num is : ${usersOnApp.length}");
+      // هنا هلوب علي المستخدمين بالكامل ولو لقيت id بتاعه في set اللي جايه من ال result هضيفه للداتا تبع الأعضاء
       for (var userEntity in usersOnApp) {
+        // TODO: Mean that this User already Member on Club I lead .....
         if (membersID.contains(userEntity.id)) {
           membersDataOnMyClub.add(userEntity);
         }
@@ -202,12 +212,14 @@ class ClubsCubit extends Cubit<ClubsStates> {
     });
   }
 
+  // TODO: USED during request a membership
   String? selectedCommittee;
   void chooseCommittee({required String chosen}) {
     selectedCommittee = chosen;
     emit(CommitteeChosenSuccessState());
   }
 
+  // TODO: Ask for membership
   void askForMembership(
       {required UserEntity userEntity,
       String? senderFirebaseFCMToken,
@@ -307,6 +319,7 @@ class ClubsCubit extends Cubit<ClubsStates> {
     ContactMeansForClubModel contactMeansModel =
         ContactMeansForClubModel(email: email, twitter: twitter);
     String? imageURL = await uploadClubImageToStorage();
+    // Update data on firestore
     final clubUpdateResult = await sl<UpdateClubUseCase>().execute(
         clubID: clubID,
         image: imageURL ?? '',
@@ -418,7 +431,7 @@ class ClubsCubit extends Cubit<ClubsStates> {
           notifyTitle: "العضوية",
           receiverFirebaseToken: memberFirebaseMessagingToken,
           receiverID: memberID,
-          notifyContent: "لقد تم إزالة عضويتك من  $clubName",
+          notifyContent: "لقد تم إزالة عضويتك من نادي $clubName",
           notifyType: NotificationType.membershipRemoveFromSpecificClub,
           clubID: clubID);
       getMembersDataOnMyClub(

@@ -121,7 +121,7 @@ class DrawerItem extends StatelessWidget {
                       decoration: BoxDecoration(color: AppColors.kMainColor),
                       accountName: Text(layoutCubit.userData!.name!),
                       accountEmail: Text(clubsCubit.dataAboutClubYouLead != null
-                          ? "قائد نادي ${clubsCubit.dataAboutClubYouLead!.name!}"
+                          ? "قائد  ${clubsCubit.dataAboutClubYouLead!.name!}"
                           : layoutCubit.userData!.email!),
                       currentAccountPicture: CircleAvatar(
                         backgroundColor:

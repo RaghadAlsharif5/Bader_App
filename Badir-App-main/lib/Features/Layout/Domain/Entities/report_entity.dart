@@ -7,6 +7,7 @@ class ReportEntity extends Equatable {
   final String clubName;
   final String senderID;
   final String pdfLink;
+  final bool? isAccepted;
 
   const ReportEntity(
       {required this.reportID,
@@ -14,9 +15,11 @@ class ReportEntity extends Equatable {
       required this.clubID,
       required this.clubName,
       required this.senderID,
-      required this.pdfLink});
+      required this.pdfLink,
+      required this.isAccepted});
 
   @override
+  // TODO: implement props
   List<Object?> get props =>
-      [reportID, reportType, clubID, clubName, senderID, pdfLink];
+      [reportID, reportType, clubID, clubName, senderID, pdfLink, isAccepted];
 }
